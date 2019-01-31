@@ -15,6 +15,7 @@
     "ordered-imports": false,
     "object-literal-sort-keys": false,
     "no-consecutive-blank-lines": false,
+    "no-console": false,  //允许使用console.log
     "trailing-comma": false,  // 不强制检查尾逗号
     "no-shadowed-variable": [
       false,
