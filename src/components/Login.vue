@@ -3,7 +3,7 @@
  * @Author: QingTong
  * @Date: 2019-01-25 15:16:27
  * @Last Modified by: QingTong
- * @Last Modified time: 2019-01-31 15:40:02
+ * @Last Modified time: 2019-02-02 11:43:34
  */
 <template>
   <div class="test">
@@ -18,10 +18,14 @@
   })
   export default class Login extends Vue {
     private created(): void {
-      console.log('login created');
+      // https://api.github.com/users/octocat/gists
+      // this.axios.get('/clientPool/GetChannel').then((response) => {
+      this.axios.get('/example/get').then((response) => {
+        console.log(response);
+      });
     }
     private mounted(): void {
-      console.log('login mounted');
+      // console.log('login mounted');
     }
     private activated(): void {
       console.log('login activated');
