@@ -43,21 +43,14 @@ div.test {
   right: 0;
   top: 50%;
 }
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+body {
+  font-family: Helvetica Neue,Helvetica,Hiragino Sans GB,Microsoft YaHei,Arial,STHeiti,sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
 }
 </style>

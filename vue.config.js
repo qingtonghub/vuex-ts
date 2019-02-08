@@ -2,19 +2,22 @@
  * @Description: vue配置文件
  * @Author: QingTong
  * @Date: 2019-01-31 11:55:02
- * @Last Modified by: QingTong
- * @Last Modified time: 2019-02-02 11:46:02
+ * @Last Modified by: qingtong
+ * @Last Modified time: 2019-02-08 20:21:24
  */
 
 module.exports = {
+  css: {
+    modules: false,
+  },
   devServer: {
     port: 8081,
-    proxy: {
-      '/': {
-        target: 'http://localhost:3001/',
-        // changeOrigin: true,
-        ws: false,
-      }
-    }
+    // proxy: {
+    //   '/': {
+    //     target: 'http://localhost:3001/',
+    //     // changeOrigin: true,
+    //     ws: false,
+    //   }
+    // }
   }
 }

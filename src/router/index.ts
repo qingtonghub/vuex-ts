@@ -12,7 +12,7 @@ import routes from './routes';
 Vue.use(Router);
 
 const router = new Router({
-  mode: 'history',
+  mode: 'hash',
   routes,
   // scrollBehavior(to, from, savedPosition) {
   //   // return 期望滚动到哪个的位置
