@@ -3,7 +3,7 @@
  * @Author: QingTong
  * @Date: 2019-01-25 15:16:27
  * @Last Modified by: qingtong
- * @Last Modified time: 2019-02-09 21:02:48
+ * @Last Modified time: 2019-02-10 20:54:56
  */
 <template>
   <div :class="[$style['page-wrap'], $style['login-wrap']]">
@@ -14,17 +14,17 @@
       <div :class="$style.fields">
         <div :class="$style['form-field']">
           <label>
-            <input v-model="form.phone" type="text" placeholder="请输入手机号">
+            <input v-model="form.phone" type="text" placeholder="请输入手机号" @blur="checkPhone">
           </label>
         </div>
         <div :class="$style['form-field']">
           <label>
-            <input v-model="form.password" type="password" placeholder="输入密码">
+            <input v-model="form.password" type="password" placeholder="输入密码" @blur="checkPsw">
           </label>
         </div>
       </div>
-      <div :class="$style['error-box']">
-        <span>请输入真实的手机号</span>
+      <div :class="[$style['error-box'], {[$style.show]: showErrorMsg}]">
+        <span>{{ errorMsg }}</span>
       </div>
       <div :class="$style['btn-box']">
         <button @click="login">登  录</button>
@@ -44,6 +44,7 @@
 
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator';
+  import verify from '../utils/verify';
   interface Form {
     phone: string;
     password: string;
@@ -56,14 +57,36 @@
       phone: '',
       password: '',
     };
-    private login(): void {
-      console.log(this.form.phone);
-      console.log(this.form.password);
-      if (this.form.phone && this.form.password) {
-        this.axios.post('/user/login', this.form).then((response) => {
-          console.log(response);
-        });
+    private showErrorMsg: boolean = false;
+    private errorMsg: string = '';
+    private checkPhone(): void {
+      if (!verify.phone(this.form.phone).success) {
+        this.errorMsg = '请输入正确的手机号';
+        this.showErrorMsg = true;
+        return;
       }
+      this.showErrorMsg = false;
+    }
+    private checkPsw(): void {
+      if (this.showErrorMsg) {
+        return;
+      }
+      if (this.form.password === '') {
+        this.errorMsg = '请输入密码';
+        this.showErrorMsg = true;
+        return;
+      }
+      this.showErrorMsg = false;
+    }
+    private login(): void {
+      this.checkPhone();
+      this.checkPsw();
+      if (this.showErrorMsg) {
+        return;
+      }
+      this.axios.post('/user/login', this.form).then((response) => {
+        console.log(response);
+      });
     }
     // private created(): void {
     //   this.axios.post('/user/post').then((response) => {
@@ -83,6 +106,7 @@
 </script>
 
 <style lang="scss" module>
+  @import '../assets/scss/keyframes.scss'; 
   .page-wrap {
     position: fixed;
     top: 0;
@@ -101,13 +125,11 @@
   }
   .form-box {
     width: 344px;
-    // height: 320px;
     position: absolute;
     left: 50%;
     top: 40%;
     z-index: 10;
     transform: translate(-50%, -50%);
-    // background: rgba(0, 0, 0, 0.5);
     .logo {
       display: block;
       overflow: hidden;
@@ -142,7 +164,6 @@
       }
     }
     .error-box {
-      padding: 14px 8px;
       margin-top: 10px;
       position: relative;
       border-radius: 5px;
@@ -150,6 +171,13 @@
       text-align: center;
       color: #fff;
       display: none;
+      height: 44px;
+      line-height: 44px;
+      background: rgba(0, 0, 0, 0.5);
+      &.show {
+        display: block;
+        animation: fadeYIn .5s ease-in-out both;
+      }
     }
     .btn-box button{
       display: block;
@@ -192,4 +220,6 @@
       }
     }
   }
+
+
 </style>
