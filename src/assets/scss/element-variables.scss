@@ -1,0 +1,16 @@
+/*
+ * @Description: ElementUI 自定义主题
+ * @Author: qingtong
+ * @Date: 2019-02-11 20:41:54
+ * @Last Modified by: qingtong
+ * @Last Modified time: 2019-02-11 20:42:16
+ */
+
+@import './custom-variables.scss';
+/* 改变主题色变量 */
+$--color-primary: $main-color;
+
+/* 改变 icon 字体路径变量，必需 */
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@import "~element-ui/packages/theme-chalk/src/index";

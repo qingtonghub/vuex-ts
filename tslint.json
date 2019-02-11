@@ -28,6 +28,7 @@
         "typeAlias": false,
         "typeParameter": false
       }
-    ]
+    ],
+    "max-line-length": false,   // 不限制每行的字符数
   }
 }

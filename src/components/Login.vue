@@ -3,7 +3,7 @@
  * @Author: QingTong
  * @Date: 2019-01-25 15:16:27
  * @Last Modified by: qingtong
- * @Last Modified time: 2019-02-10 20:54:56
+ * @Last Modified time: 2019-02-11 14:53:12
  */
 <template>
   <div :class="[$style['page-wrap'], $style['login-wrap']]">
@@ -85,7 +85,13 @@
         return;
       }
       this.axios.post('/user/login', this.form).then((response) => {
-        console.log(response);
+        const { data } = response;
+        if (!data.Success) {
+          throw new Error(data.Msg);
+        }
+        console.log('登录成功');
+      }).catch((err) => {
+        console.log(err);
       });
     }
     // private created(): void {
@@ -220,6 +226,4 @@
       }
     }
   }
-
-
 </style>

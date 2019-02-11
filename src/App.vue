@@ -1,11 +1,11 @@
 <template>
   <div id="app">
-    <div class="tit">
+    <!-- <div class="tit">
       <router-link to="/">Home</router-link>
       <router-link to="/login">A login</router-link>
       <router-link to="/register">B register</router-link>
       <router-link to="/forget">C forget</router-link>
-    </div>
+    </div> -->
     <!-- <keep-alive>
       <router-view v-if="$route.meta.keepAlive"/>
     </keep-alive>
@@ -30,19 +30,6 @@
 </script>
 
 <style lang="scss">
-a {
-  margin-right: 10px;
-}
-div.test {
-  width: 100px;
-  height: 1000px;
-  border: 1px solid #ccc;
-}
-.tit {
-  position: fixed;
-  right: 0;
-  top: 50%;
-}
 * {
   padding: 0;
   margin: 0;

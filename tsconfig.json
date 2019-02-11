@@ -9,6 +9,7 @@
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "noImplicitAny": true,  // 在表达式和声明上有隐含的any类型时报错
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
