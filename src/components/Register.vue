@@ -3,10 +3,11 @@
  * @Author: QingTong
  * @Date: 2019-01-25 15:17:02
  * @Last Modified by: qingtong
- * @Last Modified time: 2019-02-11 20:54:35
+ * @Last Modified time: 2019-02-12 13:30:57
  */
 <template>
   <section class="register" ref="registerContainer">
+    <div class="register-bg"></div>
     <div class="register-container">
       <div class="login-logo">
         <svg-icon iconClass="logo"></svg-icon>
@@ -16,27 +17,20 @@
           <div class="login-form-input">
             <svg-icon iconClass="id"></svg-icon>
             <el-form-item>
-              <el-input placeholder="请输入手机号" v-model="form.phone" autofocus></el-input>
+              <el-input placeholder="请输入手机号" v-model="form.phone" autofocus @input="debouncePhone"></el-input>
             </el-form-item>
-            <p class="error-info"></p>
+            <p class="error-info">{{ check.phone }}</p>
           </div>
           <div class="login-form-input">
             <svg-icon iconClass="password"></svg-icon>
             <el-form-item>
               <el-input type="password" placeholder="设置密码" v-model="form.password"></el-input>
             </el-form-item>
-            <p class="error-info"></p>
-          </div>
-          <div class="login-form-input">
-            <svg-icon iconClass="password"></svg-icon>
-            <el-form-item>
-              <el-input type="password" placeholder="确认密码"></el-input>
-            </el-form-item>
-            <p class="error-info"></p>
+            <p class="error-info">{{ check.password }}</p>
           </div>
         </el-form>
       </div>
-      <drag-verfication></drag-verfication>
+      <!-- <drag-verfication></drag-verfication>
       <div class="verifica-code">
         <el-row>
           <el-col :span="16">
@@ -46,9 +40,9 @@
             <el-button>发送验证码</el-button>
           </el-col>
         </el-row>
-      </div>
+      </div> -->
       <div class="submit-btn">
-        <el-button type="primary">注 册</el-button>
+        <el-button type="primary" @click="register" :loading="isLoading">注 册</el-button>
       </div>
       <div class="user-agreement">
         <el-row>
@@ -69,7 +63,7 @@
         <source type="video/webm" :src="videoPath.webm">
       </video>
     </div>-->
-    <custom-dialog title="网站服务条款" @close="dialogVisible = false;" :dialogVisible="dialogVisible" :closeOnClickModal="false" dialogWidth="600px">
+    <custom-dialog title="网站服务条款" @close="dialogVisible = false;" @confirmEvent="dialogVisible = false" :dialogVisible="dialogVisible" :closeOnClickModal="false" dialogWidth="600px">
       <div class="user-agreement-content" v-html="userAgreement"></div>
     </custom-dialog> 
   </section>
@@ -80,6 +74,8 @@ import { Component, Vue } from 'vue-property-decorator';
 import DragVerfication from '@/components/base/DragVerfication.vue';
 import CustomDialog from '@/components/base/CustomDialog.vue';
 import { userAgreement } from '@/config/config';
+import { debounce } from '../utils/utils';
+import verify from '../utils/verify';
 interface Form {
   phone: string;
   password: string;
@@ -92,13 +88,58 @@ interface Form {
 })
 export default class Register extends Vue {
   public $isSupportWebp: any;
-  private checked: boolean = false;
+  private checked: boolean = true;
   private dialogVisible: boolean = false;
   private userAgreement: string = userAgreement;
   private form: Form = {
     phone: '',
     password: '',
   };
+  private check: Form = {
+    phone: '',
+    password: '',
+  };
+  private isLoading: boolean = false;
+  private debouncePhone(): void {
+    debounce(this.checkPhone, 1000, true);
+  }
+  private checkPhone(): boolean {
+    let flag = true;
+    if (!verify.phone(this.form.phone).success) {
+      this.check.phone = '请输入正确的手机号码';
+      flag = false;
+    } else {
+      this.check.phone = '';
+    }
+    return flag;
+  }
+  private checkPsw(): boolean {
+    const psw = !!this.form.password;
+    this.check.password = psw ? '' : '请输入密码';
+    return psw;
+  }
+  private async register(): Promise<any> {
+    const phone = this.checkPhone();
+    const psw = this.checkPsw();
+    if (!phone || !psw) {
+      return;
+    }
+    this.isLoading = true;
+    const { data }  = await this.axios.post('/user/register', this.form);
+    this.isLoading = false;
+    if (data.Success) {
+      this.$message({
+        message: '注册成功，即将跳转登录页...',
+        type: 'success',
+        duration: 1500,
+        onClose: () => {
+          this.$router.push('/login');
+        }
+      });
+    } else {
+      this.$message.error(data.Msg);
+    }
+  }
 }
 </script>
 
@@ -106,24 +147,28 @@ export default class Register extends Vue {
   @import '../assets/scss/keyframes.scss'; 
   @import '../assets/scss/custom-variables.scss'; 
   .register {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
     width: 100%;
-    min-height: 710px;
-    z-index: -10;
-    background-position: center 0;
-    background-repeat: no-repeat;
-    background-size: cover;
-    zoom: 1;
-    background-image: url(../assets/imgs/agent_bg.jpg);
+    height: 100%;
+    position: relative;
+    .register-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      z-index: -10;
+      background-position: center 0;
+      background-repeat: no-repeat;
+      background-size: cover;
+      zoom: 1;
+      background-image: url(../assets/imgs/agent_bg.jpg);
+    }
     .register-container {
-      position: absolute;
+      position: fixed;
       top: 50%;
       left: 50%;
       width: 480px;
-      height: 600px;
+      height: 450px;
       transform: translate3d(-50%, -50%, 0);
       background-color: #fff;
       border-radius: 10px;
@@ -152,13 +197,12 @@ export default class Register extends Vue {
           border: 1px solid #d4d4d4;
           border-radius: 5px;
           height: 50px;
-          &:not(:last-child) {
-            margin-bottom: 30px;
-          }
+          margin-bottom: 25px;
+          // &:not(:last-child) {
+          //   margin-bottom: 20px;
+          // }
           svg {
-            width: 30px;
-            height: 30px;
-            margin: 10px;
+            margin: 15px 10px;
             color: #cdcdcd;
           }
           .el-form-item {

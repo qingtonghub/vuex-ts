@@ -5,6 +5,7 @@ const Main = () => import('@/components/Main.vue');
 const Login = () => import('@/components/Login.vue');
 const Register = () => import('@/components/Register.vue');
 const Forget = () => import('@/components/Forget.vue');
+const NotFoundComp = () => import('@/components/NotFoundComp.vue');
 
 /* chunk打包 */
 const HelloWorld = () => import(/* webpackChunkName: 'HelloWorld' */ '@/components/HelloWorld.vue');
@@ -12,14 +13,14 @@ const HelloWorld = () => import(/* webpackChunkName: 'HelloWorld' */ '@/componen
 const routes = [
   {
     path: '/',
-    redirect: '/home',
+    redirect: '/login',
     name: 'main',
     component: Main,
     meta: {
       keepAlive: false,
     },
     children: [
-      { path: 'home', name: 'home', component: HelloWorld, meta: { keepAlive: false } },
+      { path: 'home', name: 'home', component: HelloWorld, meta: { isAuth: true, keepAlive: false } },
     ]
   },
   {
@@ -27,6 +28,7 @@ const routes = [
     name: 'login',
     meta: {
       keepAlive: true,
+      isAuth: false,
     },
     component: Login
   },
@@ -35,6 +37,7 @@ const routes = [
     name: 'register',
     meta: {
       keepAlive: false,
+      isAuth: false,
     },
     component: Register
   },
@@ -43,8 +46,14 @@ const routes = [
     name: 'forget',
     meta: {
       keepAlive: false,
+      isAuth: false,
     },
     component: Forget
+  },
+  {
+    path: '/404',
+    name: 'notfoundcomp',
+    component: NotFoundComp
   }
 ];
 

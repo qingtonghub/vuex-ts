@@ -3,7 +3,7 @@
  * @Author: QingTong
  * @Date: 2019-01-25 15:16:27
  * @Last Modified by: qingtong
- * @Last Modified time: 2019-02-11 14:53:12
+ * @Last Modified time: 2019-02-12 20:59:27
  */
 <template>
   <div :class="[$style['page-wrap'], $style['login-wrap']]">
@@ -31,13 +31,14 @@
       </div>
       <div :class="$style.extra">
         <div :class="$style['extra-left']">
-          <router-link to="/forget">忘记密码？</router-link>
+          <a href="javascript:void(0)" @click="forget">忘记密码？</a>
         </div>
         <div :class="$style['extra-right']">
           没有账号？现在就
           <router-link to="/register">注册</router-link>
         </div>
       </div>
+      <div><router-link to="/home">home</router-link></div>
     </div>
   </div>
 </template>
@@ -59,6 +60,18 @@
     };
     private showErrorMsg: boolean = false;
     private errorMsg: string = '';
+    private created(): void {
+      if (this.$route.params.phone) {
+        this.form.phone = this.$route.params.phone;
+      }
+    }
+    private forget(): void {
+      if (verify.phone(this.form.phone).success) {
+        this.$router.push({ name: 'forget', params: { phone: this.form.phone }});
+      } else {
+        this.$router.push('/forget');
+      }
+    }
     private checkPhone(): void {
       if (!verify.phone(this.form.phone).success) {
         this.errorMsg = '请输入正确的手机号';

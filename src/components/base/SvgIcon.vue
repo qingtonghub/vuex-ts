@@ -1,5 +1,5 @@
 /*
- * @Description: vgIcon公共组件，用于引用svg格式的图标，全局注册
+ * @Description: SvgIcon公共组件，用于引用svg格式的图标，全局注册
  * @Author: qingtong
  * @Date: 2019-02-11 16:36:11
  * @Last Modified by: qingtong

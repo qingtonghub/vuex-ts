@@ -2,8 +2,8 @@
  * @Description: Global模块主入口文件
  * @Author: QingTong
  * @Date: 2019-01-24 10:29:54
- * @Last Modified by: QingTong
- * @Last Modified time: 2019-01-24 11:38:11
+ * @Last Modified by: qingtong
+ * @Last Modified time: 2019-02-12 20:54:48
  */
 
 import { Module, ActionTree, MutationTree, GetterTree } from 'vuex';
@@ -15,15 +15,19 @@ import { RootState } from '../types';
  */
 export const state: GlobalState = {
   version: '1.0.0',
+  token: '',
 };
 
 /**
  * getters
  */
 export const getters: GetterTree<GlobalState, RootState> = {
-  version(state: GlobalState): string {
+  getVersion(state: GlobalState): string {
     return state.version;
   },
+  getToken(state: GlobalState): string {
+    return state.token;
+  }
 };
 
 /**
@@ -33,6 +37,10 @@ export const mutations: MutationTree<GlobalState> = {
   setVersion(state: GlobalState, payload: string) {
     state.version = payload;
   },
+  // 修改Token
+  updateToken: (state, payload: string) => {
+    state.token = payload;
+  }
 };
 
 /**
@@ -42,6 +50,13 @@ export const actions: ActionTree<GlobalState, RootState> = {
   Version({ commit }, payload: string) {
     commit('setVersion', payload);
   },
+  // 退出清除token
+  logout({ commit }) {
+    commit('updateToken', '');
+  },
+  setToken({ commit }, payload: string) {
+    commit('updateToken', payload);
+  }
 };
 
 const namespaced: boolean = true;
