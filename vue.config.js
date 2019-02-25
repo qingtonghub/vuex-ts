@@ -3,11 +3,15 @@
  * @Author: QingTong
  * @Date: 2019-01-31 11:55:02
  * @Last Modified by: qingtong
- * @Last Modified time: 2019-02-11 19:35:28
+ * @Last Modified time: 2019-02-15 12:53:41
  */
-
+const express = require('express')
 const path = require('path');
 const SVG_ICON_PATH = 'src/assets/svg-icons';  // 增加svgIcon图标目录
+// const history = require('connect-history-api-fallback');
+
+const app = express();
+app.use(require('connect-history-api-fallback')());
 module.exports = {
   css: {
     modules: false,

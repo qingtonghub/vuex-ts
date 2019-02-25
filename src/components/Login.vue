@@ -100,11 +100,10 @@
       this.axios.post('/user/login', this.form).then((response) => {
         const { data } = response;
         if (!data.Success) {
-          throw new Error(data.Msg);
+          throw new Error(data.Msg ? data.Msg : '登录失败，请稍后再试');
         }
-        console.log('登录成功');
       }).catch((err) => {
-        console.log(err);
+        this.$message.error(err.message);
       });
     }
     // private created(): void {
